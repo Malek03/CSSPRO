@@ -55,6 +55,13 @@
     showSiblings: false,
     theme: 'light',
     dir: 'ltr',
+    gradType: 'linear',
+    gradAngle: 90,
+    gradColor1: '#6366f1',
+    gradColor2: '#a855f7',
+    zindex1: 1,
+    zindex2: 2,
+    zindex3: 3,
   });
 
   // Flexbox defaults
@@ -228,6 +235,36 @@
     flexOrderVal: $('#flexOrderVal'),
     alignSelf: $('#alignSelf'),
     flexItemBtns: $$('.flex-item-btn'),
+    // Gradient Controls
+    gradType: $('#gradType'),
+    gradAngle: $('#gradAngle'),
+    gradAngleVal: $('#gradAngleVal'),
+    gradAngleRow: $('#gradAngleRow'),
+    gradColor1: $('#gradColor1'),
+    gradColor1Hex: $('#gradColor1Hex'),
+    gradColor2: $('#gradColor2'),
+    gradColor2Hex: $('#gradColor2Hex'),
+    // Gradient DOM
+    gradientCanvas: $('#gradientCanvas'),
+    gradientBox: $('#gradientBox'),
+    gradientCodePanel: $('#gradientCodePanel'),
+    gradientCodeOutput: $('#gradientCodeOutput'),
+    copyGradientBtn: $('#copyGradientBtn'),
+    // Z-Index Controls
+    zindexBox1: $('#zindexBox1'),
+    zindexBox1Val: $('#zindexBox1Val'),
+    zindexBox2: $('#zindexBox2'),
+    zindexBox2Val: $('#zindexBox2Val'),
+    zindexBox3: $('#zindexBox3'),
+    zindexBox3Val: $('#zindexBox3Val'),
+    // Z-Index DOM
+    zindexCanvas: $('#zindexCanvas'),
+    zBox1: $('#zBox1'),
+    zBox2: $('#zBox2'),
+    zBox3: $('#zBox3'),
+    zBox1ValDisp: $('#zBox1ValDisp'),
+    zBox2ValDisp: $('#zBox2ValDisp'),
+    zBox3ValDisp: $('#zBox3ValDisp'),
   };
 
 
@@ -315,6 +352,14 @@
     if(dom.bgRepeatProp) dom.bgRepeatProp.value = state.bgRepeat;
     if(dom.bgAttachProp) dom.bgAttachProp.value = state.bgAttach;
     
+    if(dom.gradType) dom.gradType.value = state.gradType;
+    if(dom.gradAngle) dom.gradAngle.value = state.gradAngle;
+    if(dom.gradColor1) dom.gradColor1.value = state.gradColor1;
+    if(dom.gradColor2) dom.gradColor2.value = state.gradColor2;
+    if(dom.zindexBox1) dom.zindexBox1.value = state.zindex1;
+    if(dom.zindexBox2) dom.zindexBox2.value = state.zindex2;
+    if(dom.zindexBox3) dom.zindexBox3.value = state.zindex3;
+    
     // Borders
     dom.themeToggle.checked = state.theme === 'dark';
     dom.dirToggle.checked = state.dir === 'rtl';
@@ -359,6 +404,13 @@
     if(dom.rightVal) dom.rightVal.textContent = state.right + 'px';
     if(dom.bottomVal) dom.bottomVal.textContent = state.bottom + 'px';
     if(dom.leftVal) dom.leftVal.textContent = state.left + 'px';
+
+    if(dom.gradAngleVal) dom.gradAngleVal.textContent = state.gradAngle + 'deg';
+    if(dom.gradColor1Hex) dom.gradColor1Hex.textContent = state.gradColor1;
+    if(dom.gradColor2Hex) dom.gradColor2Hex.textContent = state.gradColor2;
+    if(dom.zindexBox1Val) dom.zindexBox1Val.textContent = state.zindex1;
+    if(dom.zindexBox2Val) dom.zindexBox2Val.textContent = state.zindex2;
+    if(dom.zindexBox3Val) dom.zindexBox3Val.textContent = state.zindex3;
   }
 
 
@@ -445,6 +497,20 @@
       card.style.backgroundPosition = '';
       card.style.backgroundRepeat = '';
       card.style.backgroundAttachment = '';
+    }
+
+    // Z-Index Playground
+    if(dom.zBox1) {
+      dom.zBox1.style.zIndex = state.zindex1;
+      dom.zBox1ValDisp.textContent = state.zindex1;
+    }
+    if(dom.zBox2) {
+      dom.zBox2.style.zIndex = state.zindex2;
+      dom.zBox2ValDisp.textContent = state.zindex2;
+    }
+    if(dom.zBox3) {
+      dom.zBox3.style.zIndex = state.zindex3;
+      dom.zBox3ValDisp.textContent = state.zindex3;
     }
 
     // Sibling Boxes (Flow Test)
@@ -543,6 +609,7 @@
 
     lines.push({ comment: 'Colors & Background' });
     lines.push({ prop: 'background-color', val: s.bgColor });
+    
     if (s.bgImage && s.bgImage.trim() !== '') {
       lines.push({ prop: 'background-image', val: `url("${s.bgImage}")` });
       lines.push({ prop: 'background-size', val: s.bgSize });
@@ -550,6 +617,7 @@
       lines.push({ prop: 'background-repeat', val: s.bgRepeat });
       lines.push({ prop: 'background-attachment', val: s.bgAttach });
     }
+    
     lines.push({ prop: 'color', val: s.textColor });
     lines.push({ blank: true });
 
@@ -598,8 +666,6 @@
       if (s.bgPos !== '0% 0%') extraCSS += `\n  background-position: ${s.bgPos};`;
       if (s.bgRepeat !== 'repeat') extraCSS += `\n  background-repeat: ${s.bgRepeat};`;
       if (s.bgAttach !== 'scroll') extraCSS += `\n  background-attachment: ${s.bgAttach};`;
-    } else {
-      extraCSS += `\n  background-color: ${s.bgColor};`;
     }
 
     return `.box {${extraCSS}
@@ -817,29 +883,90 @@
 
 
   // ═══════════════════════════════════════════════════
+  //  GRADIENT LOGIC
+  // ═══════════════════════════════════════════════════
+
+  function updateGradientPreview() {
+    if (!dom.gradientBox) return;
+    
+    if(dom.gradAngleRow) dom.gradAngleRow.style.display = state.gradType === 'linear' ? 'flex' : 'none';
+
+    if (state.gradType === 'linear') {
+      dom.gradientBox.style.backgroundImage = `linear-gradient(${state.gradAngle}deg, ${state.gradColor1}, ${state.gradColor2})`;
+    } else {
+      dom.gradientBox.style.backgroundImage = `radial-gradient(circle, ${state.gradColor1}, ${state.gradColor2})`;
+    }
+  }
+
+  function generateGradientCode() {
+    if (!dom.gradientCodeOutput) return;
+    
+    let html = span('syn-selector', '.gradient-box') + ' ' + span('syn-brace', '{') + '\n';
+    
+    let gradStr = '';
+    if (state.gradType === 'linear') {
+      gradStr = `linear-gradient(${state.gradAngle}deg, ${state.gradColor1}, ${state.gradColor2})`;
+    } else {
+      gradStr = `radial-gradient(circle, ${state.gradColor1}, ${state.gradColor2})`;
+    }
+    
+    html += '  ' + span('syn-prop', 'background-image') + span('syn-colon', ': ') + span('syn-val-color', gradStr) + span('syn-semi', ';') + '\n';
+    html += span('syn-brace', '}') + '\n';
+
+    dom.gradientCodeOutput.innerHTML = html;
+  }
+
+  function getPlainGradientCSS() {
+    let css = '.gradient-box {\n';
+    if (state.gradType === 'linear') {
+      css += `  background-image: linear-gradient(${state.gradAngle}deg, ${state.gradColor1}, ${state.gradColor2});\n`;
+    } else {
+      css += `  background-image: radial-gradient(circle, ${state.gradColor1}, ${state.gradColor2});\n`;
+    }
+    css += '}\n';
+    return css;
+  }
+
+
+  // ═══════════════════════════════════════════════════
   //  TAB SWITCHING — Show/Hide Canvas
   // ═══════════════════════════════════════════════════
 
   function switchToTab(tabName) {
     currentTab = tabName;
 
+    // Reset visibility of all canvases
+    dom.canvasStage.style.display = 'none';
+    dom.flexCanvas.style.display = 'none';
+    if(dom.zindexCanvas) dom.zindexCanvas.style.display = 'none';
+    if(dom.gradientCanvas) dom.gradientCanvas.style.display = 'none';
+    
+    // Reset code panels and guides toggle
+    dom.codePanel.style.display = 'none';
+    dom.flexCodePanel.style.display = 'none';
+    if(dom.gradientCodePanel) dom.gradientCodePanel.style.display = 'none';
+    if(dom.toggleGuides) dom.toggleGuides.style.display = 'none';
+
     if (tabName === 'flexbox') {
-      // Show flex canvas, hide default canvas + code panel
-      dom.canvasStage.style.display = 'none';
       dom.flexCanvas.style.display = 'flex';
       dom.flexCodePanel.style.display = 'flex';
-      dom.codePanel.style.display = 'none';
-      dom.toggleGuides.style.display = 'none';
       if (dom.canvasToolbarTitle) dom.canvasToolbarTitle.textContent = 'Flexbox Playground';
       updateFlexPreview();
       generateFlexCode();
+    } else if (tabName === 'zindex') {
+      if(dom.zindexCanvas) dom.zindexCanvas.style.display = 'flex';
+      if (dom.canvasToolbarTitle) dom.canvasToolbarTitle.textContent = 'Z-Index Playground';
+    } else if (tabName === 'gradient') {
+      if(dom.gradientCanvas) dom.gradientCanvas.style.display = 'flex';
+      if(dom.gradientCodePanel) dom.gradientCodePanel.style.display = 'flex';
+      if (dom.canvasToolbarTitle) dom.canvasToolbarTitle.textContent = 'Gradient Playground';
+      updateGradientPreview();
+      generateGradientCode();
     } else {
-      // Show default canvas, hide flex canvas
+      // Default standard properties (Dimensions, Colors, Layout, Gradient, etc)
       dom.canvasStage.style.display = '';
-      dom.flexCanvas.style.display = 'none';
-      dom.flexCodePanel.style.display = 'none';
       dom.codePanel.style.display = '';
-      dom.toggleGuides.style.display = '';
+      if(dom.toggleGuides) dom.toggleGuides.style.display = '';
       if (dom.canvasToolbarTitle) dom.canvasToolbarTitle.textContent = 'Visualizer Canvas';
     }
   }
@@ -1129,6 +1256,62 @@
       dom.html.setAttribute('dir', state.dir);
       dom.html.setAttribute('lang', 'en');
     });
+
+    // ─── Gradient & Z-Index ───
+    if (dom.gradType) {
+      dom.gradType.addEventListener('change', () => {
+        state.gradType = dom.gradType.value;
+        if (currentTab === 'gradient') {
+          updateGradientPreview();
+          generateGradientCode();
+        } else {
+          refresh();
+        }
+      });
+    }
+    
+    function handleGradChange() {
+      if (currentTab === 'gradient') {
+        updateGradientPreview();
+        generateGradientCode();
+      } else {
+        refresh();
+      }
+    }
+
+    if (dom.gradAngle) bindSlider(dom.gradAngle, dom.gradAngleVal, 'gradAngle', 'deg', handleGradChange);
+    if (dom.gradColor1) bindColorInput(dom.gradColor1, dom.gradColor1Hex, 'gradColor1');
+    if (dom.gradColor2) bindColorInput(dom.gradColor2, dom.gradColor2Hex, 'gradColor2');
+
+    // Make sure color pickers trigger gradient update immediately
+    [dom.gradColor1, dom.gradColor2].forEach(input => {
+      if (input) {
+        input.addEventListener('input', handleGradChange);
+      }
+    });
+
+    if (dom.copyGradientBtn) {
+      dom.copyGradientBtn.addEventListener('click', () => {
+        const css = getPlainGradientCSS();
+        navigator.clipboard.writeText(css).then(() => {
+          showToast();
+        }).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = css;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          showToast();
+        });
+      });
+    }
+
+    if (dom.zindexBox1) bindSlider(dom.zindexBox1, dom.zindexBox1Val, 'zindex1', '');
+    if (dom.zindexBox2) bindSlider(dom.zindexBox2, dom.zindexBox2Val, 'zindex2', '');
+    if (dom.zindexBox3) bindSlider(dom.zindexBox3, dom.zindexBox3Val, 'zindex3', '');
 
     // ═══════════════════════════════════════════════════
     //  FLEXBOX EVENT BINDINGS

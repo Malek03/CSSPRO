@@ -132,6 +132,12 @@
           <button class="tab-btn" data-tab="flexbox" role="tab" aria-selected="false" id="tabBtn-flexbox">
             <span class="tab-icon"><span class="material-symbols-rounded">view_quilt</span></span><span class="tab-text">Flexbox</span>
           </button>
+          <button class="tab-btn" data-tab="zindex" role="tab" aria-selected="false" id="tabBtn-zindex">
+            <span class="tab-icon"><span class="material-symbols-rounded">layers</span></span><span class="tab-text">Z-Index</span>
+          </button>
+          <button class="tab-btn" data-tab="gradient" role="tab" aria-selected="false" id="tabBtn-gradient">
+            <span class="tab-icon"><span class="material-symbols-rounded">gradient</span></span><span class="tab-text">Gradient</span>
+          </button>
         </nav>
 
         <!-- ═══ TAB 1: Dimensions & Box Model ═══ -->
@@ -707,6 +713,82 @@
           </div>
         </div>
 
+        <!-- ═══ TAB 7: Z-Index ═══ -->
+        <div class="tab-panel" id="panel-zindex" role="tabpanel">
+          <div class="control-section">
+            <h3 class="section-title">
+              <span class="material-symbols-rounded section-title-icon">layers</span>
+              Z-Index Controls
+            </h3>
+            
+            <div class="control-row">
+              <label for="zindexBox1">Red Box</label>
+              <input type="range" class="styled-range" id="zindexBox1" min="-5" max="5" value="1">
+              <span class="val-badge" id="zindexBox1Val">1</span>
+            </div>
+            
+            <div class="control-row">
+              <label for="zindexBox2">Blue Box</label>
+              <input type="range" class="styled-range" id="zindexBox2" min="-5" max="5" value="2">
+              <span class="val-badge" id="zindexBox2Val">2</span>
+            </div>
+            
+            <div class="control-row">
+              <label for="zindexBox3">Green Box</label>
+              <input type="range" class="styled-range" id="zindexBox3" min="-5" max="5" value="3">
+              <span class="val-badge" id="zindexBox3Val">3</span>
+            </div>
+            
+            <div class="edu-tip">
+              <span class="tip-icon"><span class="material-symbols-rounded">lightbulb</span></span>
+              <p>Z-index only works on positioned elements (relative, absolute, fixed, or sticky). Higher values appear in front of lower values.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TAB 8: Gradient ═══ -->
+        <div class="tab-panel" id="panel-gradient" role="tabpanel">
+          <div class="control-section">
+            <h3 class="section-title">
+              <span class="material-symbols-rounded section-title-icon">gradient</span>
+              Gradient Type
+            </h3>
+            <div class="control-row" style="margin-top: 15px;">
+              <label for="gradType">Type</label>
+              <select class="styled-select" id="gradType">
+                <option value="linear">Linear</option>
+                <option value="radial">Radial</option>
+              </select>
+            </div>
+            <div class="control-row" id="gradAngleRow">
+              <label for="gradAngle">Angle</label>
+              <input type="range" class="styled-range" id="gradAngle" min="0" max="360" value="90">
+              <span class="val-badge" id="gradAngleVal">90deg</span>
+            </div>
+            
+            <h3 class="section-title" style="margin-top:20px;">Colors</h3>
+            <div class="control-row">
+              <label for="gradColor1">Color 1</label>
+              <div class="color-input-wrap">
+                <input type="color" class="styled-color" id="gradColor1" value="#6366f1">
+                <span class="color-hex" id="gradColor1Hex">#6366f1</span>
+              </div>
+            </div>
+            <div class="control-row">
+              <label for="gradColor2">Color 2</label>
+              <div class="color-input-wrap">
+                <input type="color" class="styled-color" id="gradColor2" value="#a855f7">
+                <span class="color-hex" id="gradColor2Hex">#a855f7</span>
+              </div>
+            </div>
+            
+            <div class="edu-tip">
+              <span class="tip-icon"><span class="material-symbols-rounded">lightbulb</span></span>
+              <p>Gradients are set using the <code>background-image</code> property, not <code>background-color</code>.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </aside>
 
@@ -771,6 +853,31 @@
         </div>
       </div>
 
+      <!-- Z-Index Canvas -->
+      <div class="zindex-canvas" id="zindexCanvas" style="display:none;">
+        <div class="zindex-container">
+          <div class="zindex-box z-box1" id="zBox1" style="z-index: 1;">
+            <span class="z-label">Red Box</span>
+            <span class="z-val">z-index: <span id="zBox1ValDisp">1</span></span>
+          </div>
+          <div class="zindex-box z-box2" id="zBox2" style="z-index: 2;">
+            <span class="z-label">Blue Box</span>
+            <span class="z-val">z-index: <span id="zBox2ValDisp">2</span></span>
+          </div>
+          <div class="zindex-box z-box3" id="zBox3" style="z-index: 3;">
+            <span class="z-label">Green Box</span>
+            <span class="z-val">z-index: <span id="zBox3ValDisp">3</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gradient Canvas -->
+      <div class="gradient-canvas" id="gradientCanvas" style="display:none;">
+        <div class="gradient-container">
+          <div class="gradient-box" id="gradientBox"></div>
+        </div>
+      </div>
+
       <!-- Flex Code Panel -->
       <div class="flex-code-panel" id="flexCodePanel" style="display:none;">
         <div class="code-header">
@@ -789,6 +896,27 @@
         </div>
         <div class="code-body">
           <pre class="code-block"><code id="flexCodeOutput"></code></pre>
+        </div>
+      </div>
+
+      <!-- Gradient Code Panel -->
+      <div class="gradient-code-panel" id="gradientCodePanel" style="display:none;">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-title-text">Gradient CSS Output</span>
+          </div>
+          <div class="code-actions">
+            <button class="code-btn" id="copyGradientBtn" title="Copy Gradient CSS">
+              <span class="material-symbols-rounded" style="font-size:16px;">content_copy</span>
+              <span>Copy CSS</span>
+            </button>
+          </div>
+        </div>
+        <div class="code-body">
+          <pre class="code-block"><code id="gradientCodeOutput"></code></pre>
         </div>
       </div>
     </section>

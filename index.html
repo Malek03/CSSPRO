@@ -10,6 +10,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
+  <style>
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-25px); }
+    }
+  </style>
 </head>
 <body>
 
@@ -180,6 +195,12 @@
           </button>
           <button class="tab-btn" data-tab="gradient" role="tab" aria-selected="false" id="tabBtn-gradient">
             <span class="tab-icon"><span class="material-symbols-rounded">gradient</span></span><span class="tab-text">Gradient</span>
+          </button>
+          <button class="tab-btn" data-tab="transform" role="tab" aria-selected="false" id="tabBtn-transform">
+            <span class="tab-icon"><span class="material-symbols-rounded">360</span></span><span class="tab-text">Transform</span>
+          </button>
+          <button class="tab-btn" data-tab="animation" role="tab" aria-selected="false" id="tabBtn-animation">
+            <span class="tab-icon"><span class="material-symbols-rounded">animation</span></span><span class="tab-text">Animation</span>
           </button>
         </nav>
 
@@ -828,6 +849,161 @@
             <div class="edu-tip">
               <span class="tip-icon"><span class="material-symbols-rounded">lightbulb</span></span>
               <p>Gradients are set using the <code>background-image</code> property, not <code>background-color</code>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TAB 9: Transform ═══ -->
+        <div class="tab-panel" id="panel-transform" role="tabpanel">
+          <div class="control-section">
+            <h3 class="section-title">
+              <span class="material-symbols-rounded section-title-icon">360</span>
+              Transform 2D / 3D
+            </h3>
+            
+            <div class="control-row" style="margin-top: 15px;">
+              <label for="transTranslateX">Translate X</label>
+              <input type="range" class="styled-range" id="transTranslateX" min="-200" max="200" value="0">
+              <span class="val-badge" id="transTranslateXVal">0px</span>
+            </div>
+            
+            <div class="control-row">
+              <label for="transTranslateY">Translate Y</label>
+              <input type="range" class="styled-range" id="transTranslateY" min="-200" max="200" value="0">
+              <span class="val-badge" id="transTranslateYVal">0px</span>
+            </div>
+
+            <div class="control-row">
+              <label for="transRotateZ">Rotate Z</label>
+              <input type="range" class="styled-range" id="transRotateZ" min="-360" max="360" value="0">
+              <span class="val-badge" id="transRotateZVal">0deg</span>
+            </div>
+
+            <div class="control-row">
+              <label for="transScale">Scale (X & Y)</label>
+              <input type="range" class="styled-range" id="transScale" min="0" max="30" value="10">
+              <span class="val-badge" id="transScaleVal">1</span>
+            </div>
+
+            <div class="control-row">
+              <label for="transSkewX">Skew X</label>
+              <input type="range" class="styled-range" id="transSkewX" min="-90" max="90" value="0">
+              <span class="val-badge" id="transSkewXVal">0deg</span>
+            </div>
+
+            <div class="control-row">
+              <label for="transSkewY">Skew Y</label>
+              <input type="range" class="styled-range" id="transSkewY" min="-90" max="90" value="0">
+              <span class="val-badge" id="transSkewYVal">0deg</span>
+            </div>
+            
+            <h3 class="section-title" style="margin-top:20px;">3D Transform</h3>
+            <div class="control-row" style="margin-top: 15px;">
+              <label for="transRotateX">Rotate X</label>
+              <input type="range" class="styled-range" id="transRotateX" min="-360" max="360" value="0">
+              <span class="val-badge" id="transRotateXVal">0deg</span>
+            </div>
+            <div class="control-row">
+              <label for="transRotateY">Rotate Y</label>
+              <input type="range" class="styled-range" id="transRotateY" min="-360" max="360" value="0">
+              <span class="val-badge" id="transRotateYVal">0deg</span>
+            </div>
+            <div class="control-row">
+              <label for="transPerspective">Perspective</label>
+              <input type="range" class="styled-range" id="transPerspective" min="100" max="2000" value="1000">
+              <span class="val-badge" id="transPerspectiveVal">1000px</span>
+            </div>
+
+            <div class="edu-tip">
+              <span class="tip-icon"><span class="material-symbols-rounded">lightbulb</span></span>
+              <p>Perspective gives depth to 3D elements. It's usually applied to the parent, but here we apply it to the element itself for demonstration.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TAB 10: Animation ═══ -->
+        <div class="tab-panel" id="panel-animation" role="tabpanel">
+          <div class="control-section">
+            <h3 class="section-title">
+              <span class="material-symbols-rounded section-title-icon">animation</span>
+              Animation Settings
+            </h3>
+            
+            <div class="control-row" style="margin-top: 15px;">
+              <label for="animName">Name</label>
+              <select class="styled-select" id="animName">
+                <option value="none">none</option>
+                <option value="spin">spin</option>
+                <option value="pulse">pulse</option>
+                <option value="bounce">bounce</option>
+              </select>
+            </div>
+
+            <div class="control-row">
+              <label for="animDuration">Duration</label>
+              <input type="range" class="styled-range" id="animDuration" min="1" max="50" value="10">
+              <span class="val-badge" id="animDurationVal">1s</span>
+            </div>
+            
+            <div class="control-row">
+              <label for="animTiming">Timing Func</label>
+              <select class="styled-select" id="animTiming">
+                <option value="ease">ease</option>
+                <option value="linear">linear</option>
+                <option value="ease-in">ease-in</option>
+                <option value="ease-out">ease-out</option>
+                <option value="ease-in-out">ease-in-out</option>
+              </select>
+            </div>
+            
+            <div class="control-row">
+              <label for="animDelay">Delay</label>
+              <input type="range" class="styled-range" id="animDelay" min="0" max="50" value="0">
+              <span class="val-badge" id="animDelayVal">0s</span>
+            </div>
+            
+            <div class="control-row">
+              <label for="animIteration">Iteration Count</label>
+              <select class="styled-select" id="animIteration">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="infinite">infinite</option>
+              </select>
+            </div>
+            
+            <div class="control-row">
+              <label for="animDirection">Direction</label>
+              <select class="styled-select" id="animDirection">
+                <option value="normal">normal</option>
+                <option value="reverse">reverse</option>
+                <option value="alternate">alternate</option>
+                <option value="alternate-reverse">alternate-reverse</option>
+              </select>
+            </div>
+            
+            <div class="control-row">
+              <label for="animFillMode">Fill Mode</label>
+              <select class="styled-select" id="animFillMode">
+                <option value="none">none</option>
+                <option value="forwards">forwards</option>
+                <option value="backwards">backwards</option>
+                <option value="both">both</option>
+              </select>
+            </div>
+
+            <div class="control-row" style="margin-top: 10px;">
+              <label for="animPlayState">Play State</label>
+              <label class="switch" aria-label="Toggle Play State">
+                <input type="checkbox" id="animPlayState" checked>
+                <span class="switch-track"><span class="switch-thumb"></span></span>
+              </label>
+              <span class="val-badge" id="animPlayStateVal" style="margin-left:8px;">running</span>
+            </div>
+
+            <div class="edu-tip">
+              <span class="tip-icon"><span class="material-symbols-rounded">lightbulb</span></span>
+              <p>Animations require <code>@keyframes</code> to define the intermediate steps of the CSS sequence.</p>
             </div>
           </div>
         </div>

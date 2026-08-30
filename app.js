@@ -62,6 +62,25 @@
     zindex1: 1,
     zindex2: 2,
     zindex3: 3,
+    // Transform
+    transTranslateX: 0,
+    transTranslateY: 0,
+    transRotateZ: 0,
+    transScale: 10,
+    transSkewX: 0,
+    transSkewY: 0,
+    transRotateX: 0,
+    transRotateY: 0,
+    transPerspective: 1000,
+    // Animation
+    animName: 'none',
+    animDuration: 10,
+    animTiming: 'ease',
+    animDelay: 0,
+    animIteration: '1',
+    animDirection: 'normal',
+    animFillMode: 'none',
+    animPlayState: true
   });
 
   // Flexbox defaults
@@ -265,6 +284,37 @@
     zBox1ValDisp: $('#zBox1ValDisp'),
     zBox2ValDisp: $('#zBox2ValDisp'),
     zBox3ValDisp: $('#zBox3ValDisp'),
+    // Transform
+    transTranslateX: $('#transTranslateX'),
+    transTranslateXVal: $('#transTranslateXVal'),
+    transTranslateY: $('#transTranslateY'),
+    transTranslateYVal: $('#transTranslateYVal'),
+    transRotateZ: $('#transRotateZ'),
+    transRotateZVal: $('#transRotateZVal'),
+    transScale: $('#transScale'),
+    transScaleVal: $('#transScaleVal'),
+    transSkewX: $('#transSkewX'),
+    transSkewXVal: $('#transSkewXVal'),
+    transSkewY: $('#transSkewY'),
+    transSkewYVal: $('#transSkewYVal'),
+    transRotateX: $('#transRotateX'),
+    transRotateXVal: $('#transRotateXVal'),
+    transRotateY: $('#transRotateY'),
+    transRotateYVal: $('#transRotateYVal'),
+    transPerspective: $('#transPerspective'),
+    transPerspectiveVal: $('#transPerspectiveVal'),
+    // Animation
+    animName: $('#animName'),
+    animDuration: $('#animDuration'),
+    animDurationVal: $('#animDurationVal'),
+    animTiming: $('#animTiming'),
+    animDelay: $('#animDelay'),
+    animDelayVal: $('#animDelayVal'),
+    animIteration: $('#animIteration'),
+    animDirection: $('#animDirection'),
+    animFillMode: $('#animFillMode'),
+    animPlayState: $('#animPlayState'),
+    animPlayStateVal: $('#animPlayStateVal'),
   };
 
 
@@ -360,6 +410,27 @@
     if(dom.zindexBox2) dom.zindexBox2.value = state.zindex2;
     if(dom.zindexBox3) dom.zindexBox3.value = state.zindex3;
     
+    // Transform
+    if(dom.transTranslateX) dom.transTranslateX.value = state.transTranslateX;
+    if(dom.transTranslateY) dom.transTranslateY.value = state.transTranslateY;
+    if(dom.transRotateZ) dom.transRotateZ.value = state.transRotateZ;
+    if(dom.transScale) dom.transScale.value = state.transScale;
+    if(dom.transSkewX) dom.transSkewX.value = state.transSkewX;
+    if(dom.transSkewY) dom.transSkewY.value = state.transSkewY;
+    if(dom.transRotateX) dom.transRotateX.value = state.transRotateX;
+    if(dom.transRotateY) dom.transRotateY.value = state.transRotateY;
+    if(dom.transPerspective) dom.transPerspective.value = state.transPerspective;
+
+    // Animation
+    if(dom.animName) dom.animName.value = state.animName;
+    if(dom.animDuration) dom.animDuration.value = state.animDuration;
+    if(dom.animTiming) dom.animTiming.value = state.animTiming;
+    if(dom.animDelay) dom.animDelay.value = state.animDelay;
+    if(dom.animIteration) dom.animIteration.value = state.animIteration;
+    if(dom.animDirection) dom.animDirection.value = state.animDirection;
+    if(dom.animFillMode) dom.animFillMode.value = state.animFillMode;
+    if(dom.animPlayState) dom.animPlayState.checked = state.animPlayState;
+    
     // Borders
     dom.themeToggle.checked = state.theme === 'dark';
     dom.dirToggle.checked = state.dir === 'rtl';
@@ -411,6 +482,20 @@
     if(dom.zindexBox1Val) dom.zindexBox1Val.textContent = state.zindex1;
     if(dom.zindexBox2Val) dom.zindexBox2Val.textContent = state.zindex2;
     if(dom.zindexBox3Val) dom.zindexBox3Val.textContent = state.zindex3;
+
+    if(dom.transTranslateXVal) dom.transTranslateXVal.textContent = state.transTranslateX + 'px';
+    if(dom.transTranslateYVal) dom.transTranslateYVal.textContent = state.transTranslateY + 'px';
+    if(dom.transRotateZVal) dom.transRotateZVal.textContent = state.transRotateZ + 'deg';
+    if(dom.transScaleVal) dom.transScaleVal.textContent = state.transScale / 10;
+    if(dom.transSkewXVal) dom.transSkewXVal.textContent = state.transSkewX + 'deg';
+    if(dom.transSkewYVal) dom.transSkewYVal.textContent = state.transSkewY + 'deg';
+    if(dom.transRotateXVal) dom.transRotateXVal.textContent = state.transRotateX + 'deg';
+    if(dom.transRotateYVal) dom.transRotateYVal.textContent = state.transRotateY + 'deg';
+    if(dom.transPerspectiveVal) dom.transPerspectiveVal.textContent = state.transPerspective + 'px';
+
+    if(dom.animDurationVal) dom.animDurationVal.textContent = (state.animDuration / 10) + 's';
+    if(dom.animDelayVal) dom.animDelayVal.textContent = (state.animDelay / 10) + 's';
+    if(dom.animPlayStateVal) dom.animPlayStateVal.textContent = state.animPlayState ? 'running' : 'paused';
   }
 
 
@@ -497,6 +582,27 @@
       card.style.backgroundPosition = '';
       card.style.backgroundRepeat = '';
       card.style.backgroundAttachment = '';
+    }
+
+    // Transform
+    let transforms = [];
+    if (state.transPerspective !== 1000) transforms.push(`perspective(${state.transPerspective}px)`);
+    if (state.transTranslateX !== 0 || state.transTranslateY !== 0) transforms.push(`translate(${state.transTranslateX}px, ${state.transTranslateY}px)`);
+    if (state.transRotateZ !== 0) transforms.push(`rotateZ(${state.transRotateZ}deg)`);
+    if (state.transRotateX !== 0) transforms.push(`rotateX(${state.transRotateX}deg)`);
+    if (state.transRotateY !== 0) transforms.push(`rotateY(${state.transRotateY}deg)`);
+    if (state.transScale !== 10) transforms.push(`scale(${state.transScale / 10})`);
+    if (state.transSkewX !== 0) transforms.push(`skewX(${state.transSkewX}deg)`);
+    if (state.transSkewY !== 0) transforms.push(`skewY(${state.transSkewY}deg)`);
+    
+    card.style.transform = transforms.length > 0 ? transforms.join(' ') : 'none';
+
+    // Animation
+    if (state.animName !== 'none') {
+      const playState = state.animPlayState ? 'running' : 'paused';
+      card.style.animation = `${state.animName} ${state.animDuration / 10}s ${state.animTiming} ${state.animDelay / 10}s ${state.animIteration} ${state.animDirection} ${state.animFillMode} ${playState}`;
+    } else {
+      card.style.animation = 'none';
     }
 
     // Z-Index Playground
@@ -623,6 +729,24 @@
 
     lines.push({ comment: 'Effects' });
     lines.push({ prop: 'box-shadow', val: `${s.shadowX}px ${s.shadowY}px ${s.shadowBlur}px ${s.shadowSpread}px ${shadowRgba}` });
+    
+    let transforms = [];
+    if (s.transPerspective !== 1000) transforms.push(`perspective(${s.transPerspective}px)`);
+    if (s.transTranslateX !== 0 || s.transTranslateY !== 0) transforms.push(`translate(${s.transTranslateX}px, ${s.transTranslateY}px)`);
+    if (s.transRotateZ !== 0) transforms.push(`rotateZ(${s.transRotateZ}deg)`);
+    if (s.transRotateX !== 0) transforms.push(`rotateX(${s.transRotateX}deg)`);
+    if (s.transRotateY !== 0) transforms.push(`rotateY(${s.transRotateY}deg)`);
+    if (s.transScale !== 10) transforms.push(`scale(${s.transScale / 10})`);
+    if (s.transSkewX !== 0) transforms.push(`skewX(${s.transSkewX}deg)`);
+    if (s.transSkewY !== 0) transforms.push(`skewY(${s.transSkewY}deg)`);
+    if (transforms.length > 0) {
+      lines.push({ prop: 'transform', val: transforms.join(' ') });
+    }
+
+    if (s.animName !== 'none') {
+      const playState = s.animPlayState ? 'running' : 'paused';
+      lines.push({ prop: 'animation', val: `${s.animName} ${s.animDuration / 10}s ${s.animTiming} ${s.animDelay / 10}s ${s.animIteration} ${s.animDirection} ${s.animFillMode} ${playState}` });
+    }
 
     // Build syntax-highlighted HTML
     let html = span('syn-selector', '.box') + ' ' + span('syn-brace', '{') + '\n';
@@ -666,6 +790,50 @@
       if (s.bgPos !== '0% 0%') extraCSS += `\n  background-position: ${s.bgPos};`;
       if (s.bgRepeat !== 'repeat') extraCSS += `\n  background-repeat: ${s.bgRepeat};`;
       if (s.bgAttach !== 'scroll') extraCSS += `\n  background-attachment: ${s.bgAttach};`;
+    }
+
+    return `.box {${extraCSS}
+  /* Dimensions */
+  width: ${s.width}${s.widthUnit};
+  height: ${s.height}${s.heightUnit};
+
+  /* Box Model */
+  margin: ${margin};
+  padding: ${padding};
+
+  /* Border */
+  border: ${s.borderWidth}px ${s.borderStyle} ${s.borderColor};
+  border-radius: ${s.borderRadius}px;
+
+  /* Typography */
+  font-family: ${s.fontFamily};
+  font-size: ${s.fontSize}px;
+  font-weight: ${s.fontWeight};
+  line-height: ${s.lineHeight};
+  text-align: ${s.textAlign};
+
+  /* Colors & Background */${bgCSS}
+  color: ${s.textColor};
+
+  /* Effects */
+  box-shadow: ${s.shadowX}px ${s.shadowY}px ${s.shadowBlur}px ${s.shadowSpread}px ${shadowRgba};`;
+
+    let transforms = [];
+    if (s.transPerspective !== 1000) transforms.push(`perspective(${s.transPerspective}px)`);
+    if (s.transTranslateX !== 0 || s.transTranslateY !== 0) transforms.push(`translate(${s.transTranslateX}px, ${s.transTranslateY}px)`);
+    if (s.transRotateZ !== 0) transforms.push(`rotateZ(${s.transRotateZ}deg)`);
+    if (s.transRotateX !== 0) transforms.push(`rotateX(${s.transRotateX}deg)`);
+    if (s.transRotateY !== 0) transforms.push(`rotateY(${s.transRotateY}deg)`);
+    if (s.transScale !== 10) transforms.push(`scale(${s.transScale / 10})`);
+    if (s.transSkewX !== 0) transforms.push(`skewX(${s.transSkewX}deg)`);
+    if (s.transSkewY !== 0) transforms.push(`skewY(${s.transSkewY}deg)`);
+    if (transforms.length > 0) {
+      extraCSS += `\n  transform: ${transforms.join(' ')};`;
+    }
+
+    if (s.animName !== 'none') {
+      const playState = s.animPlayState ? 'running' : 'paused';
+      extraCSS += `\n  animation: ${s.animName} ${s.animDuration / 10}s ${s.animTiming} ${s.animDelay / 10}s ${s.animIteration} ${s.animDirection} ${s.animFillMode} ${playState};`;
     }
 
     return `.box {${extraCSS}
@@ -1312,6 +1480,56 @@
     if (dom.zindexBox1) bindSlider(dom.zindexBox1, dom.zindexBox1Val, 'zindex1', '');
     if (dom.zindexBox2) bindSlider(dom.zindexBox2, dom.zindexBox2Val, 'zindex2', '');
     if (dom.zindexBox3) bindSlider(dom.zindexBox3, dom.zindexBox3Val, 'zindex3', '');
+
+    // ─── Transform & Animation ───
+    if (dom.transTranslateX) bindSlider(dom.transTranslateX, dom.transTranslateXVal, 'transTranslateX', 'px');
+    if (dom.transTranslateY) bindSlider(dom.transTranslateY, dom.transTranslateYVal, 'transTranslateY', 'px');
+    if (dom.transRotateZ) bindSlider(dom.transRotateZ, dom.transRotateZVal, 'transRotateZ', 'deg');
+    if (dom.transRotateX) bindSlider(dom.transRotateX, dom.transRotateXVal, 'transRotateX', 'deg');
+    if (dom.transRotateY) bindSlider(dom.transRotateY, dom.transRotateYVal, 'transRotateY', 'deg');
+    if (dom.transSkewX) bindSlider(dom.transSkewX, dom.transSkewXVal, 'transSkewX', 'deg');
+    if (dom.transSkewY) bindSlider(dom.transSkewY, dom.transSkewYVal, 'transSkewY', 'deg');
+    if (dom.transPerspective) bindSlider(dom.transPerspective, dom.transPerspectiveVal, 'transPerspective', 'px');
+    
+    // Scale slider needs custom logic because it's divided by 10
+    if (dom.transScale) {
+      dom.transScale.addEventListener('input', () => {
+        state.transScale = parseInt(dom.transScale.value);
+        dom.transScaleVal.textContent = state.transScale / 10;
+        refresh();
+      });
+    }
+
+    // Animation selects
+    const animSelects = ['animName', 'animTiming', 'animIteration', 'animDirection', 'animFillMode'];
+    animSelects.forEach(id => {
+      if (dom[id]) {
+        dom[id].addEventListener('change', () => {
+          state[id] = dom[id].value;
+          refresh();
+        });
+      }
+    });
+
+    // Animation sliders (divided by 10 for seconds)
+    ['animDuration', 'animDelay'].forEach(id => {
+      if (dom[id]) {
+        dom[id].addEventListener('input', () => {
+          state[id] = parseInt(dom[id].value);
+          dom[id + 'Val'].textContent = (state[id] / 10) + 's';
+          refresh();
+        });
+      }
+    });
+
+    // Animation Play State Toggle
+    if (dom.animPlayState) {
+      dom.animPlayState.addEventListener('change', () => {
+        state.animPlayState = dom.animPlayState.checked;
+        dom.animPlayStateVal.textContent = state.animPlayState ? 'running' : 'paused';
+        refresh();
+      });
+    }
 
     // ═══════════════════════════════════════════════════
     //  FLEXBOX EVENT BINDINGS

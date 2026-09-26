@@ -315,6 +315,18 @@
     animFillMode: $('#animFillMode'),
     animPlayState: $('#animPlayState'),
     animPlayStateVal: $('#animPlayStateVal'),
+    // Transform Canvas
+    transformCanvas: $('#transformCanvas'),
+    transformCodePanel: $('#transformCodePanel'),
+    transformCodeOutput: $('#transformCodeOutput'),
+    timingContainer: $('#timingContainer'),
+    playTimingBtn: $('#playTimingBtn'),
+    // Animation Canvas
+    animationCanvas: $('#animationCanvas'),
+    animationCodePanel: $('#animationCodePanel'),
+    animationCodeOutput: $('#animationCodeOutput'),
+    fillModeContainer: $('#fillModeContainer'),
+    playFillModeBtn: $('#playFillModeBtn'),
   };
 
 
@@ -595,14 +607,31 @@
     if (state.transSkewX !== 0) transforms.push(`skewX(${state.transSkewX}deg)`);
     if (state.transSkewY !== 0) transforms.push(`skewY(${state.transSkewY}deg)`);
     
-    card.style.transform = transforms.length > 0 ? transforms.join(' ') : 'none';
+    const transformValue = transforms.length > 0 ? transforms.join(' ') : 'none';
+    card.style.transform = transformValue;
+    
+    // Apply to Transform Live Preview
+    const transformLiveBox = document.getElementById('transformLiveBox');
+    const transformLiveValues = document.getElementById('transformLiveValues');
+    if (transformLiveBox && transformLiveValues) {
+      transformLiveBox.style.transform = transformValue;
+      transformLiveValues.textContent = 'transform: ' + transformValue + ';';
+    }
 
     // Animation
+    let animationValue = 'none';
     if (state.animName !== 'none') {
       const playState = state.animPlayState ? 'running' : 'paused';
-      card.style.animation = `${state.animName} ${state.animDuration / 10}s ${state.animTiming} ${state.animDelay / 10}s ${state.animIteration} ${state.animDirection} ${state.animFillMode} ${playState}`;
-    } else {
-      card.style.animation = 'none';
+      animationValue = `${state.animName} ${state.animDuration / 10}s ${state.animTiming} ${state.animDelay / 10}s ${state.animIteration} ${state.animDirection} ${state.animFillMode} ${playState}`;
+    }
+    card.style.animation = animationValue;
+    
+    // Apply to Animation Live Preview
+    const animationLiveBox = document.getElementById('animationLiveBox');
+    const animationLiveValues = document.getElementById('animationLiveValues');
+    if (animationLiveBox && animationLiveValues) {
+      animationLiveBox.style.animation = animationValue;
+      animationLiveValues.textContent = 'animation: ' + animationValue + ';';
     }
 
     // Z-Index Playground
@@ -1084,6 +1113,100 @@
     dom.gradientCodeOutput.innerHTML = html;
   }
 
+  // ═══════════════════════════════════════════════════
+  //  TRANSFORM CODE GENERATION
+  // ═══════════════════════════════════════════════════
+
+  function generateTransformCode() {
+    if (!dom.transformCodeOutput) return;
+    const s = state;
+
+    let html = span('syn-comment', '/* Transition Example */') + '\n';
+    html += span('syn-selector', '.box') + ' ' + span('syn-brace', '{') + '\n';
+    html += '  ' + span('syn-prop', 'transition') + span('syn-colon', ': ') + span('syn-val', 'all 1s ease') + span('syn-semi', ';') + '\n';
+    html += span('syn-brace', '}') + '\n\n';
+
+    html += span('syn-comment', '/* Timing Functions */') + '\n';
+    html += span('syn-selector', '.linear') + ' ' + span('syn-brace', '{') + '\n';
+    html += '  ' + span('syn-prop', 'transition-timing-function') + span('syn-colon', ': ') + span('syn-val', 'linear') + span('syn-semi', ';') + '\n';
+    html += span('syn-brace', '}') + '\n';
+    html += span('syn-selector', '.ease') + ' ' + span('syn-brace', '{') + '\n';
+    html += '  ' + span('syn-prop', 'transition-timing-function') + span('syn-colon', ': ') + span('syn-val', 'ease') + span('syn-semi', ';') + '\n';
+    html += span('syn-brace', '}') + '\n';
+    html += span('syn-selector', '.bounce') + ' ' + span('syn-brace', '{') + '\n';
+    html += '  ' + span('syn-prop', 'transition-timing-function') + span('syn-colon', ': ') + span('syn-val', 'cubic-bezier(0.68, -0.60, 0.32, 1.60)') + span('syn-semi', ';') + '\n';
+    html += span('syn-brace', '}') + '\n\n';
+
+    // Transform with current slider state
+    let transforms = [];
+    if (s.transTranslateX !== 0 || s.transTranslateY !== 0) transforms.push(`translate(${s.transTranslateX}px, ${s.transTranslateY}px)`);
+    if (s.transRotateZ !== 0) transforms.push(`rotateZ(${s.transRotateZ}deg)`);
+    if (s.transScale !== 10) transforms.push(`scale(${s.transScale / 10})`);
+    if (s.transSkewX !== 0) transforms.push(`skewX(${s.transSkewX}deg)`);
+    if (s.transSkewY !== 0) transforms.push(`skewY(${s.transSkewY}deg)`);
+    if (s.transRotateX !== 0) transforms.push(`rotateX(${s.transRotateX}deg)`);
+    if (s.transRotateY !== 0) transforms.push(`rotateY(${s.transRotateY}deg)`);
+
+    html += span('syn-comment', '/* Transform (current settings) */') + '\n';
+    html += span('syn-selector', '.box') + ' ' + span('syn-brace', '{') + '\n';
+    if (s.transPerspective !== 1000) {
+      html += '  ' + span('syn-prop', 'perspective') + span('syn-colon', ': ') + span('syn-val-num', s.transPerspective + 'px') + span('syn-semi', ';') + '\n';
+    }
+    if (transforms.length > 0) {
+      html += '  ' + span('syn-prop', 'transform') + span('syn-colon', ': ') + span('syn-val', transforms.join(' ')) + span('syn-semi', ';') + '\n';
+    } else {
+      html += '  ' + span('syn-prop', 'transform') + span('syn-colon', ': ') + span('syn-val', 'none') + span('syn-semi', ';') + '\n';
+    }
+    html += span('syn-brace', '}');
+
+    dom.transformCodeOutput.innerHTML = html;
+  }
+
+
+  // ═══════════════════════════════════════════════════
+  //  ANIMATION CODE GENERATION
+  // ═══════════════════════════════════════════════════
+
+  function generateAnimationCode() {
+    if (!dom.animationCodeOutput) return;
+    const s = state;
+
+    let html = span('syn-comment', '/* Animation Direction */') + '\n';
+    html += span('syn-selector', '@keyframes moveDir') + ' ' + span('syn-brace', '{') + '\n';
+    html += '  ' + span('syn-val-num', '0%') + '   ' + span('syn-brace', '{') + ' ' + span('syn-prop', 'right') + span('syn-colon', ': ') + span('syn-val-num', '0') + span('syn-semi', ';') + ' ' + span('syn-prop', 'background-color') + span('syn-colon', ': ') + span('syn-val-color', '#3b82f6') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n';
+    html += '  ' + span('syn-val-num', '100%') + ' ' + span('syn-brace', '{') + ' ' + span('syn-prop', 'right') + span('syn-colon', ': ') + span('syn-val', 'calc(100% - 40px)') + span('syn-semi', ';') + ' ' + span('syn-prop', 'background-color') + span('syn-colon', ': ') + span('syn-val-color', '#8b5cf6') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n';
+    html += span('syn-brace', '}') + '\n\n';
+
+    html += span('syn-selector', '.normal') + '   ' + span('syn-brace', '{') + ' ' + span('syn-prop', 'animation-direction') + span('syn-colon', ': ') + span('syn-val', 'normal') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n';
+    html += span('syn-selector', '.reverse') + '   ' + span('syn-brace', '{') + ' ' + span('syn-prop', 'animation-direction') + span('syn-colon', ': ') + span('syn-val', 'reverse') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n';
+    html += span('syn-selector', '.alternate') + ' ' + span('syn-brace', '{') + ' ' + span('syn-prop', 'animation-direction') + span('syn-colon', ': ') + span('syn-val', 'alternate') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n\n';
+
+    html += span('syn-comment', '/* Fill Mode */') + '\n';
+    html += span('syn-selector', '.none') + '     ' + span('syn-brace', '{') + ' ' + span('syn-prop', 'animation-fill-mode') + span('syn-colon', ': ') + span('syn-val', 'none') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n';
+    html += span('syn-selector', '.forwards') + ' ' + span('syn-brace', '{') + ' ' + span('syn-prop', 'animation-fill-mode') + span('syn-colon', ': ') + span('syn-val', 'forwards') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n';
+    html += span('syn-selector', '.backwards') + span('syn-brace', '{') + ' ' + span('syn-prop', 'animation-fill-mode') + span('syn-colon', ': ') + span('syn-val', 'backwards') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n';
+    html += span('syn-selector', '.both') + '     ' + span('syn-brace', '{') + ' ' + span('syn-prop', 'animation-fill-mode') + span('syn-colon', ': ') + span('syn-val', 'both') + span('syn-semi', ';') + ' ' + span('syn-brace', '}') + '\n\n';
+
+    // Current animation state from controls
+    if (s.animName !== 'none') {
+      const playState = s.animPlayState ? 'running' : 'paused';
+      html += span('syn-comment', '/* Current Settings */') + '\n';
+      html += span('syn-selector', '.box') + ' ' + span('syn-brace', '{') + '\n';
+      html += '  ' + span('syn-prop', 'animation-name') + span('syn-colon', ': ') + span('syn-val', s.animName) + span('syn-semi', ';') + '\n';
+      html += '  ' + span('syn-prop', 'animation-duration') + span('syn-colon', ': ') + span('syn-val-num', (s.animDuration / 10) + 's') + span('syn-semi', ';') + '\n';
+      html += '  ' + span('syn-prop', 'animation-timing-function') + span('syn-colon', ': ') + span('syn-val', s.animTiming) + span('syn-semi', ';') + '\n';
+      if (s.animDelay > 0) html += '  ' + span('syn-prop', 'animation-delay') + span('syn-colon', ': ') + span('syn-val-num', (s.animDelay / 10) + 's') + span('syn-semi', ';') + '\n';
+      html += '  ' + span('syn-prop', 'animation-iteration-count') + span('syn-colon', ': ') + span('syn-val', s.animIteration) + span('syn-semi', ';') + '\n';
+      html += '  ' + span('syn-prop', 'animation-direction') + span('syn-colon', ': ') + span('syn-val', s.animDirection) + span('syn-semi', ';') + '\n';
+      html += '  ' + span('syn-prop', 'animation-fill-mode') + span('syn-colon', ': ') + span('syn-val', s.animFillMode) + span('syn-semi', ';') + '\n';
+      html += '  ' + span('syn-prop', 'animation-play-state') + span('syn-colon', ': ') + span('syn-val', playState) + span('syn-semi', ';') + '\n';
+      html += span('syn-brace', '}');
+    }
+
+    dom.animationCodeOutput.innerHTML = html;
+  }
+
+
   function getPlainGradientCSS() {
     let css = '.gradient-box {\n';
     if (state.gradType === 'linear') {
@@ -1108,11 +1231,15 @@
     dom.flexCanvas.style.display = 'none';
     if(dom.zindexCanvas) dom.zindexCanvas.style.display = 'none';
     if(dom.gradientCanvas) dom.gradientCanvas.style.display = 'none';
+    if(dom.transformCanvas) dom.transformCanvas.style.display = 'none';
+    if(dom.animationCanvas) dom.animationCanvas.style.display = 'none';
     
     // Reset code panels and guides toggle
     dom.codePanel.style.display = 'none';
     dom.flexCodePanel.style.display = 'none';
     if(dom.gradientCodePanel) dom.gradientCodePanel.style.display = 'none';
+    if(dom.transformCodePanel) dom.transformCodePanel.style.display = 'none';
+    if(dom.animationCodePanel) dom.animationCodePanel.style.display = 'none';
     if(dom.toggleGuides) dom.toggleGuides.style.display = 'none';
 
     if (tabName === 'flexbox') {
@@ -1130,8 +1257,18 @@
       if (dom.canvasToolbarTitle) dom.canvasToolbarTitle.textContent = 'Gradient Playground';
       updateGradientPreview();
       generateGradientCode();
+    } else if (tabName === 'transform') {
+      if(dom.transformCanvas) dom.transformCanvas.style.display = 'flex';
+      if(dom.transformCodePanel) dom.transformCodePanel.style.display = 'flex';
+      if (dom.canvasToolbarTitle) dom.canvasToolbarTitle.textContent = 'Transform & Transition Playground';
+      generateTransformCode();
+    } else if (tabName === 'animation') {
+      if(dom.animationCanvas) dom.animationCanvas.style.display = 'flex';
+      if(dom.animationCodePanel) dom.animationCodePanel.style.display = 'flex';
+      if (dom.canvasToolbarTitle) dom.canvasToolbarTitle.textContent = 'Animation Playground';
+      generateAnimationCode();
     } else {
-      // Default standard properties (Dimensions, Colors, Layout, Gradient, etc)
+      // Default standard properties (Dimensions, Colors, Layout, etc)
       dom.canvasStage.style.display = '';
       dom.codePanel.style.display = '';
       if(dom.toggleGuides) dom.toggleGuides.style.display = '';
@@ -1528,6 +1665,27 @@
         state.animPlayState = dom.animPlayState.checked;
         dom.animPlayStateVal.textContent = state.animPlayState ? 'running' : 'paused';
         refresh();
+      });
+    }
+
+    // ─── Transform Canvas: Timing Function Play Button ───
+    if (dom.playTimingBtn && dom.timingContainer) {
+      const triggerTimingAnimation = () => {
+        dom.timingContainer.classList.remove('tc-run');
+        setTimeout(() => {
+          dom.timingContainer.classList.add('tc-run');
+        }, 50);
+      };
+      dom.playTimingBtn.addEventListener('click', triggerTimingAnimation);
+    }
+
+    // ─── Animation Canvas: Fill Mode Play Button ───
+    if (dom.playFillModeBtn && dom.fillModeContainer) {
+      dom.playFillModeBtn.addEventListener('click', () => {
+        dom.fillModeContainer.classList.remove('ac-run-fill');
+        setTimeout(() => {
+          dom.fillModeContainer.classList.add('ac-run-fill');
+        }, 50);
       });
     }
 

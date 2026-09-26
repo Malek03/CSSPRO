@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقارنة وتصوير دوال توقيت الانتقال في CSS</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+            color: var(--accent-color);
+            text-align: center;
+        }
+
+        p.subtitle {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: #0f172a;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .track-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .track {
+            position: relative;
+            height: 60px;
+            border-bottom: 1px dashed #475569;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-right: 10px;
+        }
+
+        .track:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #cbd5e1;
+            margin-bottom: 5px;
+        }
+
+        .track-line {
+            position: relative;
+            width: 100%;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+        }
+
+        .box {
+            position: absolute;
+            right: 0; 
+            top: 2.5px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #38bdf8, #0369a1);
+            border-radius: 8px;
+            transition-property: right;
+            transition-duration: 0s; 
+        }
+
+        /* دوال التوقيت المختلفة */
+        .linear { transition-timing-function: linear; }
+        .ease { transition-timing-function: ease; }
+        .ease-in { transition-timing-function: ease-in; }
+        .ease-out { transition-timing-function: ease-out; }
+        .ease-in-out { transition-timing-function: ease-in-out; }
+        .bounce-custom { transition-timing-function: cubic-bezier(0.68, -0.60, 0.32, 1.60); }
+        .steps { transition-timing-function: steps(6, end); } /* التعديل هنا: إضافة الـ steps */
+
+        /* حالة الحركة: الانتقال من اليمين إلى اليسار */
+        .run .box {
+            right: calc(100% - 40px);
+            transition-duration: 2s; 
+        }
+
+        .info-section {
+            max-width: 800px;
+            margin-top: 40px;
+            line-height: 1.6;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .info-section h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+
+        ul {
+            padding-right: 20px;
+            margin-bottom: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        code {
+            background-color: #0f172a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #38bdf8;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>مُحاكاة دوال توقيت CSS</h1>
+    <p class="subtitle">اضغط على الزر أدناه لمقارنة كيفية تحرك العناصر بـ Timing Functions مختلفة</p>
+
+    <div class="controls">
+        <button id="playBtn">إعادة تشغيل الحركة 🚀</button>
+    </div>
+
+    <div class="track-container" id="container">
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">linear (سرعة ثابتة)</span>
+                <div class="track-line"><div class="box linear"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">ease (بداية بطيئة، سرعة، ثم تباطؤ)</span>
+                <div class="track-line"><div class="box ease"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">ease-in (بداية بطيئة جداً ثم تسارع)</span>
+                <div class="track-line"><div class="box ease-in"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">ease-out (بداية سريعة وتتباطأ عند النهاية)</span>
+                <div class="track-line"><div class="box ease-out"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">ease-in-out (بطيئة، سريعة بالمنتصف، بطيئة بالنهاية)</span>
+                <div class="track-line"><div class="box ease-in-out"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">Bounce / Custom (ارتداد مرن)</span>
+                <div class="track-line"><div class="box bounce-custom"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">steps(6) (حركة متقطعة في 6 خطوات)</span>
+                <div class="track-line"><div class="box steps"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h3>دليل سريع للفروقات:</h3>
+        <ul>
+            <li><code>linear</code>: تتحرك الصناديق بنفس السرعة تماماً من نقطة البداية إلى النهاية بدون أي تسارع.</li>
+            <li><code>ease</code>: القيمة الافتراضية، تبدأ ببطء ثم تتسارع بوضوح وتعود للتباطؤ قليلاً في النهاية.</li>
+            <li><code>ease-in</code>: تبدأ الحركة بشكل ثقيل وبطيء جداً ثم تنطلق كالصاروخ حتى تصل لنهاية الخط وهي بأقصى سرعة.</li>
+            <li><code>ease-out</code>: تبدأ بسرعة فائقة وفجائية منذ اللحظة الأولى، ثم تبدأ بالتباطؤ تدريجياً كلما اقتربت من نقطة الوصول.</li>
+            <li><code>ease-in-out</code>: تبدأ بطيئة، تبلغ ذروة السرعة في منتصف المسار، ثم تهدئ وتتباطأ بسلاسة عند الوصول.</li>
+            <li><code>cubic-bezier()</code>: تتيح لك تخصيص منحنى الحركة بدقة لصنع تأثيرات ارتداد (Bounce) تتجاوز الحدود المسموحة ثم تعود لمكانها.</li>
+            <li><code>steps(n)</code>: تقوم بتقسيم الانتقال إلى عدد (n) من الخطوات الثابتة (مثل الإطارات)، فينتقل العنصر بالقفز بدلاً من الحركة الانسيابية (ممتازة لتحريك الـ Sprites أو الآلة الكاتبة).</li>
+        </ul>
+    </div>
+
+    <script>
+        const playBtn = document.getElementById('playBtn');
+        const container = document.getElementById('container');
+
+        function triggerAnimation() {
+            container.classList.remove('run');
+            setTimeout(() => {
+                container.classList.add('run');
+            }, 50);
+        }
+
+        playBtn.addEventListener('click', triggerAnimation);
+
+        window.onload = () => {
+            triggerAnimation();
+        };
+    </script>
+</body>
+</html>

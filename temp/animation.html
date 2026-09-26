@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شرح مفصل: Direction & Fill Mode</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+            --secondary-color: #10b981;
+            --base-box-color: #64748b; /* اللون الأصلي للعنصر قبل أي أنيميشن */
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 { margin-bottom: 5px; color: var(--accent-color); text-align: center; }
+        h2 { 
+            margin-top: 40px; 
+            color: var(--secondary-color); 
+            border-bottom: 2px solid #334155; 
+            padding-bottom: 10px; 
+            width: 100%; 
+            max-width: 800px; 
+        }
+        
+        p.subtitle { color: #94a3b8; margin-bottom: 20px; text-align: center; max-width: 800px; line-height: 1.5; }
+
+        .controls { margin-bottom: 20px; display: flex; justify-content: center; }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; transform: scale(1.05); }
+        button:active { transform: scale(0.98); }
+
+        .track-container {
+            width: 100%; max-width: 800px;
+            background-color: var(--card-bg);
+            border-radius: 12px; padding: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .track {
+            position: relative; height: 70px;
+            border-bottom: 1px dashed #475569;
+            display: flex; align-items: center;
+            margin-bottom: 15px; padding-right: 10px;
+        }
+        .track:last-child { border-bottom: none; margin-bottom: 0; }
+
+        .label { display: block; font-size: 0.9rem; font-weight: bold; color: #cbd5e1; margin-bottom: 8px; }
+        .track-line { position: relative; width: 100%; height: 45px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; }
+
+        .box {
+            position: absolute; right: 0; top: 2.5px;
+            width: 40px; height: 40px;
+            background-color: var(--base-box-color); /* رمادي */
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: bold; color: #fff;
+        }
+
+        /* -----------------------------------------
+           القسم الأول: Direction (الاتجاه)
+        ----------------------------------------- */
+        @keyframes moveDir {
+            0% { right: 0; background-color: #3b82f6; } /* أزرق */
+            100% { right: calc(100% - 40px); background-color: #8b5cf6; } /* بنفسجي */
+        }
+
+        .dir-normal { animation: moveDir 2s infinite normal; }
+        .dir-reverse { animation: moveDir 2s infinite reverse; }
+        .dir-alternate { animation: moveDir 2s infinite alternate; }
+        .dir-alternate-reverse { animation: moveDir 2s infinite alternate-reverse; }
+
+        /* -----------------------------------------
+           القسم الثاني: Fill Mode (وضع التعبئة)
+        ----------------------------------------- */
+        /*
+          اللون الأصلي للعنصر: رمادي
+          عند 0% (البداية): أصفر
+          عند 100% (النهاية): أحمر مع حواف دائرية
+        */
+        @keyframes moveFill {
+            0% { right: 0; background-color: #eab308; border-radius: 8px; } /* أصفر */
+            100% { right: calc(100% - 40px); background-color: #f43f5e; border-radius: 50%; } /* أحمر ودائري */
+        }
+
+        /* سيتم تشغيل الحركة بمدة 2 ثانية، وتأخير 2 ثانية لنرى التأثير بوضوح */
+        .run-fill .fill-none { animation: moveFill 2s 2s 1 normal none; }
+        .run-fill .fill-forwards { animation: moveFill 2s 2s 1 normal forwards; }
+        .run-fill .fill-backwards { animation: moveFill 2s 2s 1 normal backwards; }
+        .run-fill .fill-both { animation: moveFill 2s 2s 1 normal both; }
+
+        .info-section {
+            width: 100%; max-width: 800px; margin-top: 20px; line-height: 1.6;
+            background-color: var(--card-bg); padding: 25px; border-radius: 12px; box-sizing: border-box;
+        }
+        .info-section h3 { color: var(--accent-color); margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        ul { padding-right: 20px; margin-bottom: 0; }
+        li { margin-bottom: 12px; }
+        code { background-color: #0f172a; padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-family: monospace; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: #fff;}
+        .bg-grey { background-color: #64748b; }
+        .bg-yellow { background-color: #eab308; color: #000; }
+        .bg-red { background-color: #f43f5e; }
+    </style>
+</head>
+<body>
+
+    <h1>مُختبر CSS Animation</h1>
+    <p class="subtitle">دليل بصري شامل لجميع قيم خصائص الاتجاه <code>animation-direction</code> وتأثيرات التعبئة <code>animation-fill-mode</code>.</p>
+
+    <!-- القسم الأول: الاتجاه -->
+    <h2>1. اتجاه الحركة (animation-direction)</h2>
+    <p class="subtitle">هذه الصناديق تتحرك بشكل مستمر (infinite). راقب كيف تتصرف عندما تصل إلى النهاية.</p>
+    
+    <div class="track-container">
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">1. normal (الطبيعي)</span>
+                <div class="track-line"><div class="box dir-normal">→</div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">2. reverse (المعكوس)</span>
+                <div class="track-line"><div class="box dir-reverse">←</div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">3. alternate (ذهاب وإياب)</span>
+                <div class="track-line"><div class="box dir-alternate">↔</div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">4. alternate-reverse (إياب ثم ذهاب)</span>
+                <div class="track-line"><div class="box dir-alternate-reverse">↔</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- القسم الثاني: التعبئة -->
+    <h2>2. أوضاع التعبئة (animation-fill-mode)</h2>
+    <p class="subtitle">
+        اللون الأصلي للعنصر: <span class="badge bg-grey">رمادي</span> | 
+        لون إطار البداية (0%): <span class="badge bg-yellow">أصفر</span> | 
+        لون إطار النهاية (100%): <span class="badge bg-red">أحمر ودائري</span>
+        <br><small>* سيتم تطبيق تأخير (Delay) لمدة ثانيتين قبل بدء الحركة لتوضيح الفكرة.</small>
+    </p>
+
+    <div class="controls">
+        <button id="playFillBtn">تشغيل الاختبار (تأخير 2 ثانية ثم حركة 2 ثانية) ⏱️</button>
+    </div>
+
+    <div class="track-container" id="fillContainer">
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">1. none (الافتراضي)</span>
+                <div class="track-line"><div class="box fill-none"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">2. forwards (يحافظ على النهاية)</span>
+                <div class="track-line"><div class="box fill-forwards"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">3. backwards (يستبق البداية)</span>
+                <div class="track-line"><div class="box fill-backwards"></div></div>
+            </div>
+        </div>
+        <div class="track">
+            <div style="width: 100%;">
+                <span class="label">4. both (يجمع بين الاثنين)</span>
+                <div class="track-line"><div class="box fill-both"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم الشرح النظري -->
+    <div class="info-section">
+        <h3>شرح قيم <code>animation-direction</code> (الاتجاه):</h3>
+        <ul>
+            <li><code>normal</code>: تبدأ الحركة من 0% إلى 100%، وعندما تنتهي تعود <strong>فجأة</strong> لنقطة الصفر لتبدأ من جديد.</li>
+            <li><code>reverse</code>: تعكس الحركة، فتبدأ من 100% وتنتهي عند 0%، وتقفز للنهاية لتعيد الكرّة.</li>
+            <li><code>alternate</code>: تذهب بسلاسة من 0% إلى 100% (ذهاب)، وفي الدورة التالية تعود من 100% إلى 0% (إياب)، وهكذا كالبندول.</li>
+            <li><code>alternate-reverse</code>: نفس السابقة ولكن تبدأ بالعكس (تبدأ بالإياب أولاً، ثم الذهاب).</li>
+        </ul>
+        
+        <br>
+
+        <h3>شرح قيم <code>animation-fill-mode</code> (وضع التعبئة):</h3>
+        <p>تشرح هذه الخاصية كيف يتصرف العنصر <strong>قبل</strong> أن تبدأ الحركة (وقت الانتظار Delay) و <strong>بعد</strong> أن تنتهي:</p>
+        <ul>
+            <li><code>none</code>: يظل العنصر بشكله الأصلي (رمادي) وقت الانتظار، يتغير أثناء الحركة، وبمجرد انتهائها يرجع <strong>فجأة</strong> لشكله الأصلي (رمادي).</li>
+            <li><code>forwards</code>: يظل بشكله الأصلي (رمادي) وقت الانتظار، يتحرك، ولكن عندما ينتهي <strong>يثبت</strong> على تنسيقات الإطار الأخير (أحمر ودائري) ولا يرجع.</li>
+            <li><code>backwards</code>: يسرق تنسيقات الإطار الأول فوراً! فيصبح (أصفر) خلال فترة الانتظار بدلاً من الرمادي. لكنه يرجع للأصلي (رمادي) بعد النهاية.</li>
+            <li><code>both</code>: <strong>الخيار الشامل!</strong> يصبح (أصفر) فوراً وقت الانتظار (يطبق الـ backwards)، وحين ينتهي يثبت على (الأحمر الدائري) إلى الأبد (يطبق الـ forwards).</li>
+        </ul>
+    </div>
+
+    <script>
+        const playFillBtn = document.getElementById('playFillBtn');
+        const fillContainer = document.getElementById('fillContainer');
+
+        function triggerFillMode() {
+            // إزالة الكلاس لإعادة العناصر لحالتها الأصلية
+            fillContainer.classList.remove('run-fill');
+            
+            // إضافة الكلاس بعد مهلة قصيرة جداً لتشغيل الأنيميشن من جديد
+            setTimeout(() => {
+                fillContainer.classList.add('run-fill');
+            }, 50);
+        }
+
+        // تشغيل الحركة عند الضغط على الزر
+        playFillBtn.addEventListener('click', triggerFillMode);
+    </script>
+</body>
+</html>

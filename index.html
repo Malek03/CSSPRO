@@ -1097,6 +1097,244 @@
         </div>
       </div>
 
+      <!-- Transform Canvas -->
+      <div class="transform-canvas" id="transformCanvas" style="display:none;">
+        <div class="transform-canvas-inner">
+          <!-- Live Preview: responds to sidebar sliders -->
+          <div class="tc-section tc-live-section">
+            <h2 class="tc-section-title">
+              <span class="material-symbols-rounded tc-section-icon">tune</span>
+              Live Preview (معاينة حية — تحكم بالمؤشرات الجانبية)
+            </h2>
+            <div class="tc-live-stage">
+              <div class="tc-live-box" id="transformLiveBox">
+                <span class="tc-live-label">Transform</span>
+                <span class="tc-live-values" id="transformLiveValues">transform: none;</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 1: Transition -->
+          <div class="tc-section">
+            <h2 class="tc-section-title">
+              <span class="material-symbols-rounded tc-section-icon">swap_horiz</span>
+              Transition (الانتقال)
+            </h2>
+            <!-- Example 1: Without vs With Transition -->
+            <div class="tc-compare-row">
+              <div class="tc-card">
+                <span class="tc-card-label">بدون تأثير الحركة</span>
+                <div class="tc-box tc-box-no-transition">مرر المؤشر هنا</div>
+              </div>
+              <div class="tc-card">
+                <span class="tc-card-label">بإستخدام تأثير الحركة</span>
+                <div class="tc-box tc-box-with-transition">مرر المؤشر هنا</div>
+              </div>
+            </div>
+            <!-- Example 2: Circle Info Card -->
+            <div class="tc-card tc-card-wide">
+              <span class="tc-card-label">Transition + Overflow Hidden</span>
+              <div class="tc-circle-wrap">
+                <div class="tc-circle-container">
+                  <h2 class="tc-circle-title">مرر المؤشر هنا</h2>
+                  <div class="tc-circle-box"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Timing Functions Visualizer -->
+          <div class="tc-section">
+            <h2 class="tc-section-title">
+              <span class="material-symbols-rounded tc-section-icon">speed</span>
+              Timing Functions (دوال التوقيت)
+            </h2>
+            <div class="tc-controls">
+              <button class="tc-play-btn" id="playTimingBtn">
+                <span class="material-symbols-rounded">play_arrow</span>
+                إعادة تشغيل الحركة 🚀
+              </button>
+            </div>
+            <div class="tc-timing-container" id="timingContainer">
+              <div class="tc-track"><div style="width:100%;"><span class="tc-track-label">linear (سرعة ثابتة)</span><div class="tc-track-line"><div class="tc-track-box tc-tf-linear"></div></div></div></div>
+              <div class="tc-track"><div style="width:100%;"><span class="tc-track-label">ease (بداية بطيئة، سرعة، ثم تباطؤ)</span><div class="tc-track-line"><div class="tc-track-box tc-tf-ease"></div></div></div></div>
+              <div class="tc-track"><div style="width:100%;"><span class="tc-track-label">ease-in (بداية بطيئة جداً ثم تسارع)</span><div class="tc-track-line"><div class="tc-track-box tc-tf-ease-in"></div></div></div></div>
+              <div class="tc-track"><div style="width:100%;"><span class="tc-track-label">ease-out (بداية سريعة وتتباطأ عند النهاية)</span><div class="tc-track-line"><div class="tc-track-box tc-tf-ease-out"></div></div></div></div>
+              <div class="tc-track"><div style="width:100%;"><span class="tc-track-label">ease-in-out (بطيئة، سريعة بالمنتصف، بطيئة بالنهاية)</span><div class="tc-track-line"><div class="tc-track-box tc-tf-ease-in-out"></div></div></div></div>
+              <div class="tc-track"><div style="width:100%;"><span class="tc-track-label">Bounce / Custom (ارتداد مرن)</span><div class="tc-track-line"><div class="tc-track-box tc-tf-bounce"></div></div></div></div>
+              <div class="tc-track"><div style="width:100%;"><span class="tc-track-label">steps(6) (حركة متقطعة في 6 خطوات)</span><div class="tc-track-line"><div class="tc-track-box tc-tf-steps"></div></div></div></div>
+            </div>
+            <div class="tc-info-panel">
+              <h3 class="tc-info-title">دليل سريع للفروقات:</h3>
+              <ul class="tc-info-list">
+                <li><code>linear</code>: تتحرك بنفس السرعة تماماً من البداية إلى النهاية.</li>
+                <li><code>ease</code>: القيمة الافتراضية، بداية بطيئة ثم تسارع ثم تباطؤ.</li>
+                <li><code>ease-in</code>: بداية ثقيلة ثم تنطلق كالصاروخ.</li>
+                <li><code>ease-out</code>: بداية سريعة ثم تتباطأ تدريجياً.</li>
+                <li><code>ease-in-out</code>: بطيئة في البداية والنهاية، سريعة بالمنتصف.</li>
+                <li><code>cubic-bezier()</code>: تخصيص منحنى الحركة (ارتداد Bounce).</li>
+                <li><code>steps(n)</code>: حركة متقطعة في n خطوات ثابتة.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Section 3: Transform -->
+          <div class="tc-section">
+            <h2 class="tc-section-title">
+              <span class="material-symbols-rounded tc-section-icon">360</span>
+              Transform (التحويل)
+            </h2>
+            <div class="tc-transform-demos">
+              <div class="tc-trans-card">
+                <span class="tc-trans-label">scale(2)</span>
+                <div class="tc-trans-circle">مرر المؤشر</div>
+              </div>
+              <div class="tc-trans-card">
+                <span class="tc-trans-label">rotate(90deg)</span>
+                <div class="tc-trans-rect">مرر المؤشر</div>
+              </div>
+              <div class="tc-trans-card">
+                <span class="tc-trans-label">skewX(25deg) + skewY(10deg)</span>
+                <div class="tc-trans-skew-container">
+                  <div class="tc-trans-skew-box tc-trans-skew1"></div>
+                  <div class="tc-trans-skew-box tc-trans-skew2">مرر المؤشر هنا</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Animation Canvas -->
+      <div class="animation-canvas" id="animationCanvas" style="display:none;">
+        <div class="animation-canvas-inner">
+          <!-- Live Preview: responds to sidebar controls -->
+          <div class="ac-section ac-live-section">
+            <h2 class="ac-section-title">
+              <span class="material-symbols-rounded ac-section-icon">tune</span>
+              Live Preview (معاينة حية — تحكم بالمؤشرات الجانبية)
+            </h2>
+            <div class="ac-live-stage">
+              <div class="ac-live-box" id="animationLiveBox">
+                <span class="ac-live-label">Animation</span>
+                <span class="ac-live-values" id="animationLiveValues">animation: none;</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 1: Animation Direction -->
+          <div class="ac-section">
+            <h2 class="ac-section-title">
+              <span class="material-symbols-rounded ac-section-icon">directions</span>
+              اتجاه الحركة (animation-direction)
+            </h2>
+            <p class="ac-subtitle">هذه الصناديق تتحرك بشكل مستمر (infinite). راقب كيف تتصرف عندما تصل إلى النهاية.</p>
+            <div class="ac-track-container">
+              <div class="ac-track"><div style="width:100%;"><span class="ac-label">1. normal (الطبيعي)</span><div class="ac-track-line"><div class="ac-box ac-dir-normal">→</div></div></div></div>
+              <div class="ac-track"><div style="width:100%;"><span class="ac-label">2. reverse (المعكوس)</span><div class="ac-track-line"><div class="ac-box ac-dir-reverse">←</div></div></div></div>
+              <div class="ac-track"><div style="width:100%;"><span class="ac-label">3. alternate (ذهاب وإياب)</span><div class="ac-track-line"><div class="ac-box ac-dir-alternate">↔</div></div></div></div>
+              <div class="ac-track"><div style="width:100%;"><span class="ac-label">4. alternate-reverse (إياب ثم ذهاب)</span><div class="ac-track-line"><div class="ac-box ac-dir-alternate-reverse">↔</div></div></div></div>
+            </div>
+          </div>
+
+          <!-- Section 2: Animation Fill Mode -->
+          <div class="ac-section">
+            <h2 class="ac-section-title">
+              <span class="material-symbols-rounded ac-section-icon">format_paint</span>
+              أوضاع التعبئة (animation-fill-mode)
+            </h2>
+            <p class="ac-subtitle">
+              اللون الأصلي: <span class="ac-badge ac-bg-grey">رمادي</span> | 
+              بداية (0%): <span class="ac-badge ac-bg-yellow">أصفر</span> | 
+              نهاية (100%): <span class="ac-badge ac-bg-red">أحمر ودائري</span>
+              <br><small>* تأخير (Delay) لمدة ثانيتين قبل بدء الحركة.</small>
+            </p>
+            <div class="ac-controls">
+              <button class="ac-play-btn" id="playFillModeBtn">
+                <span class="material-symbols-rounded">play_arrow</span>
+                تشغيل الاختبار (تأخير 2 ثانية ثم حركة 2 ثانية) ⏱️
+              </button>
+            </div>
+            <div class="ac-track-container" id="fillModeContainer">
+              <div class="ac-track"><div style="width:100%;"><span class="ac-label">1. none (الافتراضي)</span><div class="ac-track-line"><div class="ac-box ac-fill-none ac-fill-base-box"></div></div></div></div>
+              <div class="ac-track"><div style="width:100%;"><span class="ac-label">2. forwards (يحافظ على النهاية)</span><div class="ac-track-line"><div class="ac-box ac-fill-forwards ac-fill-base-box"></div></div></div></div>
+              <div class="ac-track"><div style="width:100%;"><span class="ac-label">3. backwards (يستبق البداية)</span><div class="ac-track-line"><div class="ac-box ac-fill-backwards ac-fill-base-box"></div></div></div></div>
+              <div class="ac-track"><div style="width:100%;"><span class="ac-label">4. both (يجمع بين الاثنين)</span><div class="ac-track-line"><div class="ac-box ac-fill-both ac-fill-base-box"></div></div></div></div>
+            </div>
+          </div>
+
+          <!-- Section 3: Animation Delay -->
+          <div class="ac-section">
+            <h2 class="ac-section-title">
+              <span class="material-symbols-rounded ac-section-icon">timer</span>
+              خاصية animation-delay
+            </h2>
+            <div class="ac-delay-container">
+              <div class="ac-delay-row">
+                <p class="ac-delay-label">animation-delay: <em>0s</em>;</p>
+                <div class="ac-delay-track"><div class="ac-delay-bar ac-delay-elem1"></div></div>
+              </div>
+              <div class="ac-delay-row">
+                <p class="ac-delay-label">animation-delay: <em>0.5s</em>;</p>
+                <div class="ac-delay-track"><div class="ac-delay-bar ac-delay-elem2"></div></div>
+              </div>
+              <div class="ac-delay-row">
+                <p class="ac-delay-label">animation-delay: <em>1s</em>;</p>
+                <div class="ac-delay-track"><div class="ac-delay-bar ac-delay-elem3"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Theory -->
+          <div class="ac-section ac-info-section">
+            <h3 class="ac-info-title">شرح قيم <code>animation-direction</code> (الاتجاه):</h3>
+            <ul class="ac-info-list">
+              <li><code>normal</code>: تبدأ من 0% إلى 100%، وعند الانتهاء تعود <strong>فجأة</strong> لنقطة الصفر.</li>
+              <li><code>reverse</code>: تعكس الحركة، تبدأ من 100% وتنتهي عند 0%.</li>
+              <li><code>alternate</code>: تذهب بسلاسة من 0% إلى 100%، ثم تعود 100% إلى 0% كالبندول.</li>
+              <li><code>alternate-reverse</code>: نفس السابقة ولكن تبدأ بالعكس.</li>
+            </ul>
+            <h3 class="ac-info-title" style="margin-top:20px;">شرح قيم <code>animation-fill-mode</code> (وضع التعبئة):</h3>
+            <ul class="ac-info-list">
+              <li><code>none</code>: يظل العنصر بشكله الأصلي وقت الانتظار، ويرجع <strong>فجأة</strong> بعد الانتهاء.</li>
+              <li><code>forwards</code>: عند الانتهاء <strong>يثبت</strong> على تنسيقات الإطار الأخير ولا يرجع.</li>
+              <li><code>backwards</code>: يأخذ تنسيقات الإطار الأول فوراً خلال فترة الانتظار.</li>
+              <li><code>both</code>: <strong>الخيار الشامل!</strong> يطبق backwards قبل البداية و forwards بعد النهاية.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transform Code Panel -->
+      <div class="transform-code-panel" id="transformCodePanel" style="display:none;">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-title-text">Transform & Transition CSS</span>
+          </div>
+        </div>
+        <div class="code-body">
+          <pre class="code-block"><code id="transformCodeOutput"></code></pre>
+        </div>
+      </div>
+
+      <!-- Animation Code Panel -->
+      <div class="animation-code-panel" id="animationCodePanel" style="display:none;">
+        <div class="code-header">
+          <div class="code-title">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-title-text">Animation CSS Output</span>
+          </div>
+        </div>
+        <div class="code-body">
+          <pre class="code-block"><code id="animationCodeOutput"></code></pre>
+        </div>
+      </div>
+
       <!-- Flex Code Panel -->
       <div class="flex-code-panel" id="flexCodePanel" style="display:none;">
         <div class="code-header">
